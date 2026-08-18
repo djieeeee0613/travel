@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>👩‍❤️‍👨 我們的專屬旅行日程表 🌙</title>
+  <!-- Google Fonts 圓體字型 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-main: #141218;
+      --bg-secondary: #1D1924;
+      --card-bg: rgba(33, 29, 41, 0.88);
+      --card-border: rgba(255, 143, 171, 0.2);
+      --card-hover-border: rgba(255, 143, 171, 0.5);
+      
+      --primary: #FF7597;
+      --primary-glow: rgba(255, 117, 151, 0.35);
+      --primary-light: rgba(255, 117, 151, 0.15);
+      --primary-dark: #E65076;
+      --accent: #FFB3C6;
+
+      --text-main: #F3F4F6;
+      --text-muted: #9CA3AF;
+      --text-sub: #D1D5DB;
+
+      --uber-color: #E2E8F0;
+      --uber-bg: rgba(71, 85, 105, 0.35);
+      --uber-border: #64748B;
+      
+      --ubike-color: #FDBA74;
+      --ubike-bg: rgba(194, 65, 12, 0.25);
+      --ubike-border: #EA580C;
+
+      --walk-color: #86EFAC;
+      --walk-bg: rgba(22, 101, 52, 0.25);
+      --walk-border: #16A34A;
+
+      --tag-spot: rgba(56, 189, 248, 0.2);
+      --tag-spot-text: #7DD3FC;
+      --tag-food: rgba(251, 191, 36, 0.2);
+      --tag-food-text: #FDE047;
+      --tag-cafe: rgba(251, 146, 60, 0.2);
+      --tag-cafe-text: #FDBA74;
+      --tag-photo: rgba(192, 132, 252, 0.2);
+      --tag-photo-text: #E9D5FF;
+      --tag-hotel: rgba(52, 211, 153, 0.2);
+      --tag-hotel-text: #A7F3D0;
+
+      --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.5);
+      --shadow-lg: 0 16px 36px rgba(0, 0, 0, 0.65);
+      --radius-sm: 12px;
+      --radius-md: 18px;
+      --radius-lg: 24px;
+    }
+
+    /* 4 款暗色情侶主題切換 */
+    [data-theme="purple"] {
+      --bg-main: #0F0E17;
+      --bg-secondary: #1A1726;
+      --card-bg: rgba(30, 26, 46, 0.9);
+      --primary: #A78BFA;
+      --primary-glow: rgba(167, 139, 250, 0.35);
+      --primary-light: rgba(167, 139, 250, 0.15);
+      --primary-dark: #8B5CF6;
+      --card-border: rgba(167, 139, 250, 0.2);
+      --card-hover-border: rgba(167, 139, 250, 0.5);
+    }
+
+    [data-theme="slate"] {
+      --bg-main: #0F172A;
+      --bg-secondary: #1E293B;
+      --card-bg: rgba(30, 41, 59, 0.9);
+      --primary: #38BDF8;
+      --primary-glow: rgba(56, 189, 248, 0.35);
+      --primary-light: rgba(56, 189, 248, 0.15);
+      --primary-dark: #0284C7;
+      --card-border: rgba(56, 189, 248, 0.2);
+      --card-hover-border: rgba(56, 189, 248, 0.5);
+    }
+
+    [data-theme="forest"] {
+      --bg-main: #0A140F;
+      --bg-secondary: #13221A;
+      --card-bg: rgba(22, 38, 29, 0.9);
+      --primary: #34D399;
+      --primary-glow: rgba(52, 211, 153, 0.35);
+      --primary-light: rgba(52, 211, 153, 0.15);
+      --primary-dark: #059669;
+      --card-border: rgba(52, 211, 153, 0.2);
+      --card-hover-border: rgba(52, 211, 153, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'M PLUS Rounded 1c', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(circle at 20% 15%, var(--bg-secondary) 0%, var(--bg-main) 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding-bottom: 80px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* 漂浮裝飾背景 */
+    .bg-decor {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.25;
+      filter: blur(1px);
+    }
+    .decor-1 { top: 8%; left: 4%; font-size: 2rem; animation: float 7s ease-in-out infinite; }
+    .decor-2 { top: 22%; right: 5%; font-size: 1.8rem; animation: float 8s ease-in-out infinite 1s; }
+    .decor-3 { bottom: 15%; left: 5%; font-size: 2.2rem; animation: float 9s ease-in-out infinite 2s; }
+    .decor-4 { bottom: 28%; right: 6%; font-size: 1.6rem; animation: float 6s ease-in-out infinite 1.5s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(5deg); }
+    }
+
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 24px 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* 頂部看板 */
+    .header-banner {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 26px 24px;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 24px;
+    }
+
+    .header-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .couple-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .avatar-pair {
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      border: 2px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .avatar:last-child { margin-left: -12px; }
+    
+    .avatar-heart {
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1rem;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: translateX(-50%) scale(1); }
+      50% { transform: translateX(-50%) scale(1.25); }
+    }
+
+    .trip-title-wrapper {
+      flex: 1;
+    }
+
+    .trip-title-input {
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: var(--text-main);
+      border: 1px dashed transparent;
+      border-radius: var(--radius-sm);
+      padding: 4px 8px;
+      width: 100%;
+      background: transparent;
+      transition: all 0.2s;
+    }
+    .trip-title-input:hover, .trip-title-input:focus {
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.06);
+      outline: none;
+    }
+
+    .trip-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-left: 8px;
+      margin-top: 3px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .theme-picker {
+      display: flex;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--card-border);
+      border-radius: 30px;
+      padding: 4px;
+      gap: 4px;
+    }
+
+    .theme-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform 0.2s;
+    }
+    .theme-dot:hover { transform: scale(1.15); }
+    .theme-dot.active { transform: scale(1.15); border-color: white; box-shadow: 0 0 8px var(--primary); }
+    .dot-berry { background: #FF7597; }
+    .dot-purple { background: #A78BFA; }
+    .dot-slate { background: #38BDF8; }
+    .dot-forest { background: #34D399; }
+
+    /* 統計小橫條 */
+    .trip-stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      padding-top: 16px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.1);
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .stat-icon { font-size: 1.5rem; }
+    .stat-info .stat-label { font-size: 0.78rem; color: var(--text-muted); font-weight: 500; }
+    .stat-info .stat-value { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
+
+    /* 導航列與按鈕 */
+    .main-controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .day-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 4px 2px;
+      scrollbar-width: none;
+    }
+    .day-tabs::-webkit-scrollbar { display: none; }
+
+    .day-tab {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-sub);
+      padding: 9px 18px;
+      border-radius: 30px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      box-shadow: var(--shadow-sm);
+    }
+    .day-tab:hover {
+      border-color: var(--primary);
+      color: var(--text-main);
+      transform: translateY(-2px);
+    }
+    .day-tab.active {
+      background: var(--primary);
+      color: #111;
+      border-color: var(--primary);
+      box-shadow: 0 4px 15px var(--primary-glow);
+      transform: translateY(-2px);
+    }
+
+    .btn-add-day {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px dashed var(--primary);
+      color: var(--primary);
+      padding: 9px 16px;
+      border-radius: 30px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-add-day:hover { background: var(--primary-light); }
+
+    .action-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .view-toggle {
+      display: flex;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--card-border);
+      border-radius: 30px;
+      padding: 3px;
+    }
+
+    .view-btn {
+      border: none;
+      background: transparent;
+      padding: 7px 13px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .view-btn.active {
+      background: var(--primary);
+      color: #111;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: #111;
+      border: none;
+      border-radius: 30px;
+      padding: 10px 20px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 15px var(--primary-glow);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--primary-glow);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-sub);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 30px;
+      padding: 8px 16px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.14);
+      color: var(--text-main);
+    }
+
+    /* 時程展示區 */
+    .schedule-wrapper { margin-bottom: 30px; }
+
+    /* 1. 卡片時程視圖 */
+    .timeline-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .timeline-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.25s;
+      display: grid;
+      grid-template-columns: 140px 1fr auto;
+      gap: 18px;
+      align-items: center;
+    }
+    .timeline-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--card-hover-border);
+      transform: translateY(-2px);
+    }
+
+    .timeline-card.completed {
+      opacity: 0.6;
+      background: rgba(20, 18, 24, 0.75);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+    .timeline-card.completed .location-title {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    .card-time-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      border-right: 1px dashed rgba(255, 255, 255, 0.12);
+      padding-right: 14px;
+    }
+
+    .card-time-badge {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 0.95rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-transit-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    /* 通勤標籤樣式 */
+    .transit-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 12px;
+    }
+    .transit-uber {
+      background: var(--uber-bg);
+      color: var(--uber-color);
+      border: 1px solid var(--uber-border);
+    }
+    .transit-ubike {
+      background: var(--ubike-bg);
+      color: var(--ubike-color);
+      border: 1px solid var(--ubike-border);
+    }
+    .transit-walk {
+      background: var(--walk-bg);
+      color: var(--walk-color);
+      border: 1px solid var(--walk-border);
+    }
+    .transit-metro {
+      background: rgba(168, 85, 247, 0.2);
+      color: #D8B4FE;
+      border: 1px solid #9333EA;
+    }
+    .transit-bus {
+      background: rgba(14, 165, 233, 0.2);
+      color: #7DD3FC;
+      border: 1px solid #0284C7;
+    }
+
+    .transit-duration {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .card-detail-col {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .location-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .location-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .category-tag {
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 2px 9px;
+      border-radius: 10px;
+    }
+    .tag-spot { background: var(--tag-spot); color: var(--tag-spot-text); }
+    .tag-food { background: var(--tag-food); color: var(--tag-food-text); }
+    .tag-cafe { background: var(--tag-cafe); color: var(--tag-cafe-text); }
+    .tag-photo { background: var(--tag-photo); color: var(--tag-photo-text); }
+    .tag-hotel { background: var(--tag-hotel); color: var(--tag-hotel-text); }
+
+    .location-memo {
+      font-size: 0.88rem;
+      color: var(--text-sub);
+      background: rgba(255, 255, 255, 0.04);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      border-left: 3px solid var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .location-meta {
+      display: flex;
+      gap: 14px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .card-action-col {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+    .btn-icon:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      transform: scale(1.1);
+    }
+    .btn-icon.check-done { color: var(--primary); }
+    .btn-icon.delete:hover {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: #EF4444;
+      color: #F87171;
+    }
+
+    /* 2. 表格詳細工作表 */
+    .table-view-container {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      box-shadow: var(--shadow-sm);
+      overflow-x: auto;
+    }
+
+    .worksheet-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .worksheet-table th {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--primary);
+      padding: 12px 14px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .worksheet-table th:first-child { border-top-left-radius: var(--radius-sm); border-bottom-left-radius: var(--radius-sm); }
+    .worksheet-table th:last-child { border-top-right-radius: var(--radius-sm); border-bottom-right-radius: var(--radius-sm); }
+
+    .worksheet-table td {
+      padding: 13px 14px;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+      font-size: 0.88rem;
+      vertical-align: middle;
+    }
+    .worksheet-table tr:hover td {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    /* 空狀態提示 */
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      background: var(--card-bg);
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius-lg);
+    }
+    .empty-icon { font-size: 3rem; margin-bottom: 12px; }
+    .empty-text { font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px; }
+    .empty-sub { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 18px; }
+
+    /* 彈窗表單樣式 */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      padding: 16px;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-content {
+      background: #1E1A26;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      padding: 26px 24px;
+      transform: translateY(15px);
+      transition: transform 0.2s ease;
+      color: var(--text-main);
+    }
+    .modal-overlay.active .modal-content { transform: translateY(0); }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    }
+
+    .modal-title {
+      font-size: 1.28rem;
+      font-weight: 800;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-close-modal {
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+    .btn-close-modal:hover { color: var(--text-main); }
+
+    .form-group { margin-bottom: 16px; }
+    .form-label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+    .form-label .required { color: #F87171; margin-left: 2px; }
+    .form-hint { font-size: 0.78rem; color: var(--text-muted); font-weight: normal; margin-left: 6px; }
+
+    .form-control {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-sm);
+      font-size: 0.92rem;
+      color: var(--text-main);
+      font-family: inherit;
+      background: rgba(0, 0, 0, 0.25);
+      transition: all 0.2s;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: rgba(0, 0, 0, 0.4);
+      box-shadow: 0 0 0 2px var(--primary-light);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* 通勤方式多選方塊 (支援同時選 2 種) */
+    .transit-chips-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .transit-chip {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-sm);
+      padding: 9px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+      position: relative;
+    }
+    .transit-chip .chip-icon { font-size: 1.3rem; }
+    .transit-chip .chip-text { font-size: 0.82rem; font-weight: 700; color: var(--text-sub); }
+    
+    .transit-chip:hover {
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .transit-chip.selected {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      box-shadow: 0 0 10px var(--primary-glow);
+    }
+    .transit-chip.selected .chip-text { color: var(--primary); }
+    .transit-chip.selected::after {
+      content: "✓";
+      position: absolute;
+      top: 4px;
+      right: 6px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* 情侶小工具 */
+    .couple-widgets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .widget-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .widget-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+    }
+
+    .packing-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .packing-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      padding: 4px 0;
+      color: var(--text-sub);
+    }
+    .packing-item input[type="checkbox"] {
+      accent-color: var(--primary);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+    .packing-item.checked span {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    .widget-input-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .widget-input-row input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      background: rgba(0, 0, 0, 0.2);
+      color: var(--text-main);
+    }
+    .btn-sm-add {
+      background: var(--primary);
+      color: #111;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 0 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* 浮動提示 Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(30, 26, 38, 0.96);
+      border: 1px solid var(--primary);
+      color: var(--text-main);
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      z-index: 1000;
+      transition: transform 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 768px) {
+      .timeline-card { grid-template-columns: 1fr; gap: 12px; }
+      .card-time-col {
+        border-right: none;
+        border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+        padding-right: 0;
+        padding-bottom: 8px;
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .card-action-col {
+        justify-content: flex-end;
+        border-top: 1px dashed rgba(255, 255, 255, 0.1);
+        padding-top: 8px;
+      }
+      .header-top { flex-direction: column; align-items: flex-start; }
+      .header-actions { width: 100%; justify-content: space-between; }
+      .form-row { grid-template-columns: 1fr; }
+      .transit-chips-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 背景氛圍圖示 -->
+  <div class="bg-decor decor-1">🌙</div>
+  <div class="bg-decor decor-2">✨</div>
+  <div class="bg-decor decor-3">🪐</div>
+  <div class="bg-decor decor-4">🕯️</div>
+
+  <div class="container">
+    
+    <!-- 頂部資訊看板 -->
+    <header class="header-banner">
+      <div class="header-top">
+        <div class="couple-info">
+          <div class="avatar-pair">
+            <div class="avatar-heart">💕</div>
+            <div class="avatar">👦</div>
+            <div class="avatar">👧</div>
+          </div>
+          <div class="trip-title-wrapper">
+            <input type="text" id="tripTitleInput" class="trip-title-input" value="👩‍❤️‍👨 我們的專屬小旅行 🌙" title="點擊修改旅行名稱">
+            <div class="trip-subtitle">
+              <span>📅 <span>自訂出發日期</span></span>
+              <span>•</span>
+              <span>💖 隨時準備出發</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <!-- 4 種暗色系主題切換 -->
+          <div class="theme-picker" title="切換暗色主題配色">
+            <div class="theme-dot dot-berry active" onclick="setTheme('berry')" title="午夜莓粉"></div>
+            <div class="theme-dot dot-purple" onclick="setTheme('purple')" title="星空紫夜"></div>
+            <div class="theme-dot dot-slate" onclick="setTheme('slate')" title="曜石深黛"></div>
+            <div class="theme-dot dot-forest" onclick="setTheme('forest')" title="夜幕墨綠"></div>
+          </div>
+          <button class="btn-secondary" onclick="exportData()" title="備份行程檔案">💾 備份</button>
+          <button class="btn-secondary" onclick="window.print()" title="列印行程表">🖨️ 列印</button>
+        </div>
+      </div>
+
+      <!-- 統計數據 -->
+      <div class="trip-stats-bar">
+        <div class="stat-card">
+          <div class="stat-icon">📍</div>
+          <div class="stat-info">
+            <div class="stat-label">規劃地點數</div>
+            <div class="stat-value" id="statSpotsCount">0 個地點</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-info">
+            <div class="stat-label">預估總花費</div>
+            <div class="stat-value" id="statBudget">NT$ 0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">❤️</div>
+          <div class="stat-info">
+            <div class="stat-label">雙人打卡進度</div>
+            <div class="stat-value" id="statProgress">0 / 0 (0%)</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 導航列與按鈕 -->
+    <div class="main-controls">
+      <div class="day-tabs" id="dayTabsList">
+        <!-- 動態產生天數標籤 -->
+      </div>
+
+      <div class="action-group">
+        <!-- 視圖切換 (卡片時程 vs 詳細工作表) -->
+        <div class="view-toggle">
+          <button class="view-btn active" id="viewBtnTimeline" onclick="switchView('timeline')">
+            <span>📅 時程卡片</span>
+          </button>
+          <button class="view-btn" id="viewBtnTable" onclick="switchView('table')">
+            <span>📊 詳細工作表</span>
+          </button>
+        </div>
+
+        <!-- 添加地點按鈕 -->
+        <button class="btn-primary" onclick="openAddModal()">
+          <span>➕</span>
+          <span>添加旅遊地點</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 時程內容區 -->
+    <main class="schedule-wrapper">
+      <!-- 1. 卡片時程視圖 -->
+      <div id="timelineView" class="timeline-container"></div>
+
+      <!-- 2. 詳細工作表視圖 -->
+      <div id="tableView" class="table-view-container" style="display: none;">
+        <table class="worksheet-table">
+          <thead>
+            <tr>
+              <th style="width: 70px; text-align: center;">狀態</th>
+              <th style="width: 110px;">時間</th>
+              <th>旅遊地點名稱</th>
+              <th>類別</th>
+              <th>通勤方式 (至多2種)</th>
+              <th>備忘 / 備註說明</th>
+              <th style="width: 100px;">預估花費</th>
+              <th style="width: 100px; text-align: center;">操作</th>
+            </tr>
+          </thead>
+          <tbody id="worksheetTableBody"></tbody>
+        </table>
+      </div>
+    </main>
+
+    <!-- 情侶自訂小工具 -->
+    <section class="couple-widgets-grid">
+      <!-- 行李打包清單 -->
+      <div class="widget-card">
+        <div class="widget-title">
+          <span>🎒 行李打包清單</span>
+          <span style="font-size: 0.85rem; font-weight: normal;" id="packingProgress">0/0</span>
+        </div>
+        <ul class="packing-list" id="packingListContainer"></ul>
+        <div class="widget-input-row">
+          <input type="text" id="newPackingInput" placeholder="自訂行李項目（如：隨身充電線、拍立得...）" onkeypress="if(event.key==='Enter') addPackingItem()">
+          <button class="btn-sm-add" onclick="addPackingItem()">新增</button>
+        </div>
+      </div>
+
+      <!-- 旅行隨手備忘 -->
+      <div class="widget-card">
+        <div class="widget-title">
+          <span>💌 旅行隨手備忘</span>
+          <span>✨</span>
+        </div>
+        <div style="font-size: 0.88rem; line-height: 1.7; color: var(--text-sub);">
+          <p>• 點擊上方「➕ 添加旅遊地點」開始自訂第一筆行程。</p>
+          <p>• 通勤方式預設包含 Uber、YouBike、步行，且可同時選擇 2 種。</p>
+          <p>• 點擊卡片右側 ✏️ 即可隨時修改地點或交通備註，點擊 ❤️ 完成打卡。</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- 添加 / 編輯地點彈窗 -->
+  <div class="modal-overlay" id="locationModal" onclick="handleModalOverlayClick(event)">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTitle">
+          <span>✨</span>
+          <span id="modalTitleText">添加旅遊地點</span>
+        </h3>
+        <button class="btn-close-modal" onclick="closeModal()">×</button>
+      </div>
+
+      <form id="locationForm" onsubmit="handleSaveLocation(event)">
+        <input type="hidden" id="editItemId" value="">
+
+        <!-- 天數與類別 -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">選擇日程<span class="required">*</span></label>
+            <select id="formDaySelect" class="form-control" required></select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">地點類別</label>
+            <select id="formCategory" class="form-control">
+              <option value="spot">📍 景點觀光</option>
+              <option value="food">🍽️ 美食餐廳</option>
+              <option value="cafe">☕ 咖啡甜點</option>
+              <option value="photo">📸 拍照打卡</option>
+              <option value="hotel">🏨 住宿休憩</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 地點名稱 -->
+        <div class="form-group">
+          <label class="form-label">旅遊地點名稱<span class="required">*</span></label>
+          <input type="text" id="formLocationName" class="form-control" placeholder="請輸入欲前往的地點名稱" required>
+        </div>
+
+        <!-- 時間區間 -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">開始時間<span class="required">*</span></label>
+            <input type="time" id="formStartTime" class="form-control" value="09:00" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">結束時間</label>
+            <input type="time" id="formEndTime" class="form-control" value="11:00">
+          </div>
+        </div>
+
+        <!-- 通勤方式 (支援同時選 2 種：Uber, YouBike, 步行等) -->
+        <div class="form-group">
+          <label class="form-label">
+            通勤方式
+            <span class="form-hint">（支援同時選 2 種，例如：Uber + 步行 或 YouBike + 步行）</span>
+          </label>
+          
+          <div class="transit-chips-grid">
+            <div class="transit-chip" data-transit="uber" onclick="toggleTransitOption('uber')">
+              <span class="chip-icon">🚗</span>
+              <span class="chip-text">Uber / 叫車</span>
+            </div>
+            <div class="transit-chip" data-transit="ubike" onclick="toggleTransitOption('ubike')">
+              <span class="chip-icon">🚲</span>
+              <span class="chip-text">YouBike / 單車</span>
+            </div>
+            <div class="transit-chip" data-transit="walk" onclick="toggleTransitOption('walk')">
+              <span class="chip-icon">🚶</span>
+              <span class="chip-text">步行 / 散步</span>
+            </div>
+            <div class="transit-chip" data-transit="metro" onclick="toggleTransitOption('metro')">
+              <span class="chip-icon">🚇</span>
+              <span class="chip-text">捷運 / 地鐵</span>
+            </div>
+            <div class="transit-chip" data-transit="bus" onclick="toggleTransitOption('bus')">
+              <span class="chip-icon">🚌</span>
+              <span class="chip-text">公車 / 巴士</span>
+            </div>
+          </div>
+          <input type="text" id="formTransitNote" class="form-control" placeholder="自訂通勤備註（例：搭乘 Uber 至路口後步行 3 分鐘）">
+        </div>
+
+        <!-- 備忘錄 -->
+        <div class="form-group">
+          <label class="form-label">備忘與備註說明</label>
+          <textarea id="formMemo" class="form-control" rows="2" placeholder="可填寫注意事項、必帶物品或提醒事項..."></textarea>
+        </div>
+
+        <!-- 花費 -->
+        <div class="form-group">
+          <label class="form-label">預估花費 (NT$)</label>
+          <input type="number" id="formCost" class="form-control" placeholder="0" min="0" step="50">
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" onclick="closeModal()">取消</button>
+          <button type="submit" class="btn-primary" id="btnSaveLocation">儲存地點 💕</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 提示 Toast -->
+  <div id="toast" class="toast">
+    <span id="toastIcon">✨</span>
+    <span id="toastMsg">已更新！</span>
+  </div>
+
+  <script>
+    // 完全空白自訂範本（無特定旅遊地點推薦）
+    const DEFAULT_DATA = {
+      tripTitle: "👩‍❤️‍👨 我們的專屬小旅行 🌙",
+      daysCount: 3,
+      currentDay: 1,
+      theme: "berry",
+      items: [],
+      packings: [
+        { id: "p1", text: "身分證件與必備卡片", checked: false },
+        { id: "p2", text: "行動電源與充電線材", checked: false },
+        { id: "p3", text: "隨身相機 / 拍立得", checked: false }
+      ]
+    };
+
+    let appData = loadData();
+    let currentView = 'timeline';
+    let selectedTransits = [];
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', () => {
+      applyTheme(appData.theme || 'berry');
+      setupTripTitleListener();
+      renderDayTabs();
+      renderSchedule();
+      renderStats();
+      renderPackingList();
+    });
+
+    function loadData() {
+      const saved = localStorage.getItem('DARK_COUPLE_TRAVEL_PLANNER_DATA');
+      if (saved) {
+        try {
+          return JSON.parse(saved);
+        } catch (e) {
+          console.error("讀取儲存資料失敗", e);
+        }
+      }
+      return JSON.parse(JSON.stringify(DEFAULT_DATA));
+    }
+
+    function saveData() {
+      localStorage.setItem('DARK_COUPLE_TRAVEL_PLANNER_DATA', JSON.stringify(appData));
+      renderStats();
+    }
+
+    function setupTripTitleListener() {
+      const input = document.getElementById('tripTitleInput');
+      if (input) {
+        input.value = appData.tripTitle;
+        input.addEventListener('change', (e) => {
+          appData.tripTitle = e.target.value;
+          saveData();
+          showToast("✨ 旅行名稱已更新！");
+        });
+      }
+    }
+
+    // 主題配色切換
+    function setTheme(theme) {
+      appData.theme = theme;
+      applyTheme(theme);
+      saveData();
+      showToast(`🎨 已切換為${getThemeName(theme)}配色！`);
+    }
+
+    function applyTheme(theme) {
+      document.body.setAttribute('data-theme', theme);
+      document.querySelectorAll('.theme-dot').forEach(dot => dot.classList.remove('active'));
+      const activeDot = document.querySelector(`.dot-${theme}`);
+      if (activeDot) activeDot.classList.add('active');
+    }
+
+    function getThemeName(theme) {
+      switch(theme) {
+        case 'berry': return '午夜莓粉';
+        case 'purple': return '星空紫夜';
+        case 'slate': return '曜石深黛';
+        case 'forest': return '夜幕墨綠';
+        default: return '暗色';
+      }
+    }
+
+    // 視圖切換
+    function switchView(view) {
+      currentView = view;
+      document.getElementById('viewBtnTimeline').classList.toggle('active', view === 'timeline');
+      document.getElementById('viewBtnTable').classList.toggle('active', view === 'table');
+      document.getElementById('timelineView').style.display = view === 'timeline' ? 'flex' : 'none';
+      document.getElementById('tableView').style.display = view === 'table' ? 'block' : 'none';
+      renderSchedule();
+    }
+
+    // 天數標籤
+    function renderDayTabs() {
+      const container = document.getElementById('dayTabsList');
+      container.innerHTML = '';
+
+      const allTab = document.createElement('button');
+      allTab.className = `day-tab ${appData.currentDay === 'all' ? 'active' : ''}`;
+      allTab.innerHTML = `<span>✨ 全部日程</span>`;
+      allTab.onclick = () => selectDay('all');
+      container.appendChild(allTab);
+
+      for (let i = 1; i <= appData.daysCount; i++) {
+        const tab = document.createElement('button');
+        tab.className = `day-tab ${appData.currentDay === i ? 'active' : ''}`;
+        tab.innerHTML = `<span>Day ${i}</span>`;
+        tab.onclick = () => selectDay(i);
+        container.appendChild(tab);
+      }
+
+      const addDayBtn = document.createElement('button');
+      addDayBtn.className = 'btn-add-day';
+      addDayBtn.innerHTML = `<span>➕ 增加天數 (Day ${appData.daysCount + 1})</span>`;
+      addDayBtn.onclick = addNewDay;
+      container.appendChild(addDayBtn);
+    }
+
+    function selectDay(day) {
+      appData.currentDay = day;
+      renderDayTabs();
+      renderSchedule();
+    }
+
+    function addNewDay() {
+      appData.daysCount += 1;
+      appData.currentDay = appData.daysCount;
+      saveData();
+      renderDayTabs();
+      renderSchedule();
+      showToast(`🎉 已新增 Day ${appData.daysCount}！`);
+    }
+
+    function getCategoryInfo(cat) {
+      switch(cat) {
+        case 'food': return { label: '🍽️ 美食餐廳', class: 'tag-food' };
+        case 'cafe': return { label: '☕ 咖啡甜點', class: 'tag-cafe' };
+        case 'photo': return { label: '📸 拍照打卡', class: 'tag-photo' };
+        case 'hotel': return { label: '🏨 住宿休憩', class: 'tag-hotel' };
+        default: return { label: '📍 景點觀光', class: 'tag-spot' };
+      }
+    }
+
+    function getTransitBadgeHTML(type) {
+      switch(type) {
+        case 'uber':
+          return `<span class="transit-badge transit-uber">🚗 Uber / 叫車</span>`;
+        case 'ubike':
+          return `<span class="transit-badge transit-ubike">🚲 YouBike</span>`;
+        case 'walk':
+          return `<span class="transit-badge transit-walk">🚶 步行</span>`;
+        case 'metro':
+          return `<span class="transit-badge transit-metro">🚇 捷運/地鐵</span>`;
+        case 'bus':
+          return `<span class="transit-badge transit-bus">🚌 公車</span>`;
+        default:
+          return '';
+      }
+    }
+
+    // 渲染行程列表
+    function renderSchedule() {
+      const items = (appData.items || []).filter(item => {
+        if (appData.currentDay === 'all') return true;
+        return item.day === appData.currentDay;
+      }).sort((a, b) => {
+        if (a.day !== b.day) return a.day - b.day;
+        return (a.timeStart || '').localeCompare(b.timeStart || '');
+      });
+
+      if (currentView === 'timeline') {
+        renderTimeline(items);
+      } else {
+        renderTable(items);
+      }
+    }
+
+    function renderTimeline(items) {
+      const container = document.getElementById('timelineView');
+      if (items.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">🗺️🌙</div>
+            <div class="empty-text">這一天尚未添加任何旅遊地點</div>
+            <div class="empty-sub">點擊下方按鈕，自由添加自訂地點與通勤方式吧！</div>
+            <button class="btn-primary" style="margin: 0 auto;" onclick="openAddModal()">
+              <span>➕ 添加第一個旅遊地點</span>
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = items.map(item => {
+        const catInfo = getCategoryInfo(item.category);
+        const transitsHtml = (item.transits || []).map(t => getTransitBadgeHTML(t)).join('');
+        const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.location)}`;
+
+        return `
+          <div class="timeline-card ${item.completed ? 'completed' : ''}" id="card_${item.id}">
+            <div class="card-time-col">
+              <div class="card-time-badge">
+                <span>⏰</span>
+                <span>${item.timeStart} ${item.timeEnd ? '~ ' + item.timeEnd : ''}</span>
+              </div>
+              ${transitsHtml ? `<div class="card-transit-list">${transitsHtml}</div>` : ''}
+              ${item.transitNote ? `<div class="transit-duration"><span>⏱️</span><span>${escapeHtml(item.transitNote)}</span></div>` : ''}
+            </div>
+
+            <div class="card-detail-col">
+              <div class="location-header">
+                ${appData.currentDay === 'all' ? `<span class="category-tag tag-spot" style="background:var(--primary);color:#111;">Day ${item.day}</span>` : ''}
+                <h4 class="location-title">${escapeHtml(item.location)}</h4>
+                <span class="category-tag ${catInfo.class}">${catInfo.label}</span>
+              </div>
+
+              ${item.memo ? `
+                <div class="location-memo">
+                  <span>💡</span>
+                  <span>${escapeHtml(item.memo)}</span>
+                </div>
+              ` : ''}
+
+              <div class="location-meta">
+                ${item.cost ? `<span>💰 預估 NT$ ${item.cost}</span>` : '<span>💰 免門票/未計費</span>'}
+                <a href="${gmapsUrl}" target="_blank" style="color:var(--primary); text-decoration:none; display:inline-flex; align-items:center; gap:3px;">
+                  <span>🗺️ 地圖導航</span>
+                </a>
+              </div>
+            </div>
+
+            <div class="card-action-col">
+              <button class="btn-icon check-done" onclick="toggleComplete('${item.id}')" title="${item.completed ? '取消打卡' : '完成打卡'}">
+                ${item.completed ? '❤️' : '🤍'}
+              </button>
+              <button class="btn-icon" onclick="openEditModal('${item.id}')" title="編輯地點與通勤">
+                ✏️
+              </button>
+              <button class="btn-icon delete" onclick="deleteItem('${item.id}')" title="刪除地點">
+                🗑️
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderTable(items) {
+      const tbody = document.getElementById('worksheetTableBody');
+      if (items.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" style="text-align:center; padding: 36px; color: var(--text-muted);">
+              📭 尚無地點紀錄，點擊上方「➕ 添加旅遊地點」開始自訂！
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = items.map(item => {
+        const catInfo = getCategoryInfo(item.category);
+        const transitsHtml = (item.transits || []).map(t => getTransitBadgeHTML(t)).join(' ');
+
+        return `
+          <tr class="${item.completed ? 'completed' : ''}">
+            <td style="text-align:center;">
+              <button class="btn-icon check-done" style="width:30px;height:30px;font-size:0.85rem;margin:0 auto;" onclick="toggleComplete('${item.id}')">
+                ${item.completed ? '❤️' : '🤍'}
+              </button>
+            </td>
+            <td>
+              <strong>${item.timeStart}</strong><br>
+              <small style="color:var(--text-muted);">${item.timeEnd || ''}</small>
+            </td>
+            <td>
+              <strong>${escapeHtml(item.location)}</strong>
+              ${appData.currentDay === 'all' ? `<br><small style="color:var(--primary);">Day ${item.day}</small>` : ''}
+            </td>
+            <td><span class="category-tag ${catInfo.class}">${catInfo.label}</span></td>
+            <td>
+              <div>${transitsHtml || '<span style="color:var(--text-muted);">-</span>'}</div>
+              ${item.transitNote ? `<small style="color:var(--text-muted); display:block; margin-top:2px;">${escapeHtml(item.transitNote)}</small>` : ''}
+            </td>
+            <td><span style="font-size:0.85rem;">${escapeHtml(item.memo || '-')}</span></td>
+            <td>${item.cost ? `NT$ ${item.cost}` : '-'}</td>
+            <td style="text-align:center;">
+              <div style="display:flex; justify-content:center; gap:6px;">
+                <button class="btn-icon" style="width:30px;height:30px;font-size:0.85rem;" onclick="openEditModal('${item.id}')" title="編輯">✏️</button>
+                <button class="btn-icon delete" style="width:30px;height:30px;font-size:0.85rem;" onclick="deleteItem('${item.id}')" title="刪除">🗑️</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderStats() {
+      const count = (appData.items || []).length;
+      const totalBudget = (appData.items || []).reduce((sum, item) => sum + (Number(item.cost) || 0), 0);
+      const completedCount = (appData.items || []).filter(item => item.completed).length;
+      const percent = count > 0 ? Math.round((completedCount / count) * 100) : 0;
+
+      document.getElementById('statSpotsCount').innerText = `${count} 個地點`;
+      document.getElementById('statBudget').innerText = `NT$ ${totalBudget.toLocaleString()}`;
+      document.getElementById('statProgress').innerText = `${completedCount} / ${count} (${percent}%)`;
+    }
+
+    function populateDaySelect(selectedVal) {
+      const select = document.getElementById('formDaySelect');
+      select.innerHTML = '';
+      for (let i = 1; i <= appData.daysCount; i++) {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.innerText = `第 ${i} 天 (Day ${i})`;
+        if (i === Number(selectedVal)) opt.selected = true;
+        select.appendChild(opt);
+      }
+    }
+
+    function openAddModal() {
+      document.getElementById('modalTitleText').innerText = "添加旅遊地點";
+      document.getElementById('editItemId').value = "";
+      document.getElementById('locationForm').reset();
+      
+      const targetDay = appData.currentDay === 'all' ? 1 : appData.currentDay;
+      populateDaySelect(targetDay);
+      
+      selectedTransits = ["walk"];
+      updateTransitChipUI();
+      
+      document.getElementById('locationModal').classList.add('active');
+      document.getElementById('formLocationName').focus();
+    }
+
+    function openEditModal(id) {
+      const item = appData.items.find(x => x.id === id);
+      if (!item) return;
+
+      document.getElementById('modalTitleText').innerText = "編輯旅遊地點";
+      document.getElementById('editItemId').value = item.id;
+      
+      populateDaySelect(item.day);
+      document.getElementById('formLocationName').value = item.location;
+      document.getElementById('formCategory').value = item.category;
+      document.getElementById('formStartTime').value = item.timeStart || "";
+      document.getElementById('formEndTime').value = item.timeEnd || "";
+      document.getElementById('formTransitNote').value = item.transitNote || "";
+      document.getElementById('formMemo').value = item.memo || "";
+      document.getElementById('formCost').value = item.cost || "";
+
+      selectedTransits = [...(item.transits || [])];
+      updateTransitChipUI();
+
+      document.getElementById('locationModal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('locationModal').classList.remove('active');
+    }
+
+    function handleModalOverlayClick(e) {
+      if (e.target.id === 'locationModal') {
+        closeModal();
+      }
+    }
+
+    // 通勤方式雙選邏輯 (最多選擇 2 種)
+    function toggleTransitOption(transitKey) {
+      const idx = selectedTransits.indexOf(transitKey);
+      if (idx > -1) {
+        selectedTransits.splice(idx, 1);
+      } else {
+        if (selectedTransits.length >= 2) {
+          showToast("💕 通勤方式最多同時選擇 2 種（已替換最前項）");
+          selectedTransits.shift();
+        }
+        selectedTransits.push(transitKey);
+      }
+      updateTransitChipUI();
+    }
+
+    function updateTransitChipUI() {
+      document.querySelectorAll('.transit-chip').forEach(chip => {
+        const key = chip.getAttribute('data-transit');
+        chip.classList.toggle('selected', selectedTransits.includes(key));
+      });
+    }
+
+    // 儲存地點 (新增或更新)
+    function handleSaveLocation(e) {
+      e.preventDefault();
+      const editId = document.getElementById('editItemId').value;
+      const day = Number(document.getElementById('formDaySelect').value);
+      const location = document.getElementById('formLocationName').value.trim();
+      const category = document.getElementById('formCategory').value;
+      const timeStart = document.getElementById('formStartTime').value;
+      const timeEnd = document.getElementById('formEndTime').value;
+      const transitNote = document.getElementById('formTransitNote').value.trim();
+      const memo = document.getElementById('formMemo').value.trim();
+      const cost = Number(document.getElementById('formCost').value) || 0;
+
+      if (!location) {
+        showToast("⚠️ 請輸入地點名稱！");
+        return;
+      }
+
+      if (!appData.items) appData.items = [];
+
+      if (editId) {
+        const item = appData.items.find(x => x.id === editId);
+        if (item) {
+          item.day = day;
+          item.location = location;
+          item.category = category;
+          item.timeStart = timeStart;
+          item.timeEnd = timeEnd;
+          item.transits = [...selectedTransits];
+          item.transitNote = transitNote;
+          item.memo = memo;
+          item.cost = cost;
+        }
+        showToast("✨ 地點已成功更新！");
+      } else {
+        const newItem = {
+          id: "item_" + Date.now(),
+          day: day,
+          location: location,
+          category: category,
+          timeStart: timeStart,
+          timeEnd: timeEnd,
+          transits: [...selectedTransits],
+          transitNote: transitNote,
+          memo: memo,
+          cost: cost,
+          completed: false
+        };
+        appData.items.push(newItem);
+        showToast("🌙 已添加新的旅遊地點！");
+      }
+
+      saveData();
+      renderSchedule();
+      closeModal();
+    }
+
+    function toggleComplete(id) {
+      const item = appData.items.find(x => x.id === id);
+      if (item) {
+        item.completed = !item.completed;
+        saveData();
+        renderSchedule();
+        showToast(item.completed ? "💖 雙人打卡完成！" : "🤍 已取消打卡狀態");
+      }
+    }
+
+    function deleteItem(id) {
+      if (confirm("確定要刪除這個自訂旅遊地點嗎？")) {
+        appData.items = appData.items.filter(x => x.id !== id);
+        saveData();
+        renderSchedule();
+        showToast("🗑️ 地點已刪除！");
+      }
+    }
+
+    // 行李清單
+    function renderPackingList() {
+      const container = document.getElementById('packingListContainer');
+      container.innerHTML = (appData.packings || []).map(p => `
+        <li class="packing-item ${p.checked ? 'checked' : ''}" onclick="togglePacking('${p.id}')">
+          <input type="checkbox" ${p.checked ? 'checked' : ''} onclick="event.stopPropagation(); togglePacking('${p.id}')">
+          <span>${escapeHtml(p.text)}</span>
+        </li>
+      `).join('');
+
+      const checkedCount = (appData.packings || []).filter(p => p.checked).length;
+      document.getElementById('packingProgress').innerText = `${checkedCount}/${(appData.packings || []).length}`;
+    }
+
+    function togglePacking(id) {
+      const item = (appData.packings || []).find(p => p.id === id);
+      if (item) {
+        item.checked = !item.checked;
+        saveData();
+        renderPackingList();
+      }
+    }
+
+    function addPackingItem() {
+      const input = document.getElementById('newPackingInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      if (!appData.packings) appData.packings = [];
+      appData.packings.push({
+        id: "p_" + Date.now(),
+        text: text,
+        checked: false
+      });
+      input.value = '';
+      saveData();
+      renderPackingList();
+      showToast("🎒 已新增行李項目！");
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const msgSpan = document.getElementById('toastMsg');
+      msgSpan.innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/[&<>'"]/g, 
+        tag => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          "'": '&#39;',
+          '"': '&quot;'
+        }[tag] || tag)
+      );
+    }
+
+    // 匯出備份 JSON
+    function exportData() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `旅行日程表_${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast("💾 備份檔案已下載！");
+    }
+  </script>
+</body>
+</html>
